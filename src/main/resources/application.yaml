@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: cnx
+
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    username: cnx
+    password: cnx
+    url: jdbc:h2:file:~/.cnx/cnx_data
+
+  liquibase:
+    enabled: false
+    user: cnx
+    password: cnx
+    url: jdbc:h2:file:~/.cnx/cnx_data
+    change-log: classpath:/db/changelog/master-changelog.yaml
