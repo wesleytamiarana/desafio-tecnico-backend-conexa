@@ -8,7 +8,7 @@ spring:
   datasource:
     username: cnx
     password: cnx
-    url: jdbc:h2:file:~/.cnx/cnx_data
+    url: jdbc:h2:mem:cnx_data
 
   liquibase:
     enabled: true
@@ -19,8 +19,8 @@ spring:
 
   h2:
     console:
-      enabled: true
+      enabled: false
 
   jpa:
-    show-sql: false
-    hibernate.ddl-auto: none
+      show-sql: false
+      hibernate.ddl-auto: none

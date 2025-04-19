@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: credenciado-20250417-01
+      author: wesley.tamiarana@gmail.com
+      changes:
+        - createTable:
+            tableName: credenciados
+            columns:
+              - column:
+                  name: uuid
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: cpf
+                  type: VARCHAR(14)
+              - column:
+                  name: data_nascimento
+                  type: DATE
+              - column:
+                  name: telefone
+                  type: VARCHAR(60)
+              - column:
+                  name: especialidade
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: credenciado-20250417-02
+      author: wesley.tamiarana@gmail.com
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: credenciados
+            baseColumnNames: uuid
+            referencedTableName: credenciais
+            referencedColumnNames: uuid
+            constraintName: fk_01
