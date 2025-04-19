@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: pacientes-insert-test_20250418-01
+      author: wesley.tamiarana@gmail.com
+      changes:
+        - insert:
+            tableName: pacientes
+            columns:
+              - column:
+                  name: uuid
+                  value: 1790cc1d-a5d2-4dac-887d-cc0e67217408
+              - column:
+                  name: cpf
+                  value: 48192464024
+              - column:
+                  name: nome
+                  value: Sr. Joao Ninguem

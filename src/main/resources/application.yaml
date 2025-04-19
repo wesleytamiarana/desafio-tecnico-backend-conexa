@@ -15,7 +15,7 @@ spring:
     user: cnx
     password: cnx
     url: jdbc:h2:file:~/.cnx/cnx_data
-    change-log: classpath:/db/changelog/master-changelog.yaml
+    change-log: classpath:/db/changelog/master.changelog.yaml
 
   h2:
     console:
@@ -24,3 +24,9 @@ spring:
   jpa:
     show-sql: false
     hibernate.ddl-auto: none
+  
+application:
+  security:
+       token:
+         duration: 9000000
+         signature-key: 5EDEC8E55CBA5A46AAB7DDF7D85BA85C3FF46259CC2B09ED7FBC47F4F13456AC

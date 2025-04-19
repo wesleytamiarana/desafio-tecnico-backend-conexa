@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+        id: credenciais-insert-test_20250418-02
+        author: wesley.tamiarana@gmail.com
+        changes:
+          - insert:
+              tableName: credenciais
+              columns:
+                - column:
+                    name: uuid
+                    value: 5799402c-57c7-45bf-aec4-0b71169e939d
+                - column:
+                    name: email
+                    value: cardiologia@gmail.com
+                - column:
+                    name: senha
+                    value: $2a$10$/YdkL1priTnmqOiNSHXNLexl7bQNOm3ulQopMKU0JNGw/mScoZmjC
+
+  - changeSet:
+      id: credenciados-insert-test_20250418-02
+      author: wesley.tamiarana@gmail.com
+      changes:
+        - insert:
+            tableName: credenciados
+            columns:
+              - column:
+                  name: uuid
+                  value: 5799402c-57c7-45bf-aec4-0b71169e939d
+              - column:
+                  name: cpf
+                  value: 71996339044
+              - column:
+                  name: data_nascimento
+                  valueDate: "1970-07-07"
+              - column:
+                  name: telefone
+                  value: (81) 98342-2258
+              - column:
+                  name: especialidade
+                  value: Cardiologia
+
+  - changeSet:
+      id: pacientes-insert-test_20250418-02
+      author: wesley.tamiarana@gmail.com
+      changes:
+        - insert:
+            tableName: pacientes
+            columns:
+              - column:
+                  name: uuid
+                  value: a6e445ea-a988-45ec-b2b7-ea4230cdf249
+              - column:
+                  name: cpf
+                  value: 83671830026
+              - column:
+                  name: nome
+                  value: Sr. Jose Ninguem

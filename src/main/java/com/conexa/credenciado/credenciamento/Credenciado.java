@@ -116,23 +116,22 @@ public class Credenciado {
 		return this;
 	}
 
+	public String senha() {
+		return ofNullable(this.credenciais).map(Credenciais::senha).orElse(null);
+	}
+
 
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this, JSON_STYLE)
 				.append("uuid", this.uuid)
 				.append("cpf", this.cpf)
-				.append("data_nascimento", this.dataNascimento)
+				.append("dataNascimento", this.dataNascimento)
 				.append("telefone", this.telefone)
 				.append("especialidade", this.especialidade)
 				.append("email", this.email())
 				.append("senha", "********")
 				.toString();
-	}
-
-
-	public String senha() {
-		return ofNullable(this.credenciais).map(Credenciais::senha).orElse(null);
 	}
 
 

@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/master.changelog.yaml
+  - include:
+      file: db/credenciais/credenciais.inserts.changelog.yaml
+  - include:
+      file: db/credenciados/credenciados.inserts.changelog.yaml
+  - include:
+      file: db/pacientes/pacientes.inserts.changelog.yaml

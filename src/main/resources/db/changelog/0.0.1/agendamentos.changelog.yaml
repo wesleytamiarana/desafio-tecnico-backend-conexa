@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: agendamentos_20250418-01
+      author: wesley.tamiarana@gmail.com
+      changes:
+        - createTable:
+            tableName: agendamentos
+            columns:
+              - column:
+                  name: uuid
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: uuid_credenciado
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: uuid_paciente
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cpf
+                  type: VARCHAR(14)
+              - column:
+                  name: data_hora
+                  type: DATETIME
+                  constraints:
+                    unique: true
+                    nullable: false
+
+  - changeSet:
+      id: agendamentos_20250418-02
+      author: wesley.tamiarana@gmail.com
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: agendamentos
+            baseColumnNames: uuid_credenciado
+            referencedTableName: credenciados
+            referencedColumnNames: uuid
+            constraintName: agendamentos-FK_01
+
+  - changeSet:
+      id: adendamentos_20250418-03
+      author: wesley.tamiarana@gmail.com
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: agendamentos
+            baseColumnNames: uuid_paciente
+            referencedTableName: pacientes
+            referencedColumnNames: uuid
+            constraintName: agendamentos-FK_02

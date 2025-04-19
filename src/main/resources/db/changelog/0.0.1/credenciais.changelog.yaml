@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: credenciais-20250417-01
+      id: credenciais_20250417-01
       author: wesley.tamiarana@gmail.com
       changes:
         - createTable:
@@ -23,20 +23,3 @@ databaseChangeLog:
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
-
-  - changeSet:
-        id: credenciais-20250417-02
-        author: wesley.tamiarana@gmail.com
-        changes:
-          - insert:
-              tableName: credenciais
-              columns:
-                - column:
-                    name: uuid
-                    value: 31d4a5ca-2f28-4d4f-871e-a5a07d04f6fd
-                - column:
-                    name: email
-                    value: admin@cnx.com
-                - column:
-                    name: senha
-                    value: $2a$10$/YdkL1priTnmqOiNSHXNLexl7bQNOm3ulQopMKU0JNGw/mScoZmjC

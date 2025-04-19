@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+        id: credenciais-insert-test_20250417-01
+        author: wesley.tamiarana@gmail.com
+        changes:
+          - insert:
+              tableName: credenciais
+              columns:
+                - column:
+                    name: uuid
+                    value: ec28b993-78eb-4fd8-909f-51864092802c
+                - column:
+                    name: email
+                    value: master@cnx.com
+                - column:
+                    name: senha
+                    value: $2a$10$/YdkL1priTnmqOiNSHXNLexl7bQNOm3ulQopMKU0JNGw/mScoZmjC

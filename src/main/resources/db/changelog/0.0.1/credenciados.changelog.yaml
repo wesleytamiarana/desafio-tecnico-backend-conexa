@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: credenciado-20250417-01
+      id: credenciados_20250417-01
       author: wesley.tamiarana@gmail.com
       changes:
         - createTable:
@@ -15,6 +15,9 @@ databaseChangeLog:
               - column:
                   name: cpf
                   type: VARCHAR(14)
+                  constraints:
+                    unique: true
+                    nullable: false
               - column:
                   name: data_nascimento
                   type: DATE
@@ -26,7 +29,7 @@ databaseChangeLog:
                   type: VARCHAR(255)
 
   - changeSet:
-      id: credenciado-20250417-02
+      id: credenciados_20250417-02
       author: wesley.tamiarana@gmail.com
       changes:
         - addForeignKeyConstraint:
@@ -34,4 +37,4 @@ databaseChangeLog:
             baseColumnNames: uuid
             referencedTableName: credenciais
             referencedColumnNames: uuid
-            constraintName: fk_01
+            constraintName: credenciados-FK_01

@@ -1,4 +1,4 @@
-package com.conexa.credenciado.credenciamento;
+package com.conexa.credenciado.agendamento;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestPropertySource(locations = "classpath:application-test.yaml")
-public class CredenciamentoITest {
+public class AgendamentoITest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -31,7 +31,7 @@ public class CredenciamentoITest {
 	private ObjectMapper objectMapper;
 
 	@Autowired
-	private  CredenciadoRepository credenciadoRepository;
+	private  AgendamentoRepository credenciadoRepository;
 
 
 	@BeforeEach
@@ -40,17 +40,13 @@ public class CredenciamentoITest {
 	}
 
 	@Test
-	void testCredenciamentoComDadosValidos() throws Exception {
-		CredenciamentoInput payload = new CredenciamentoInput("clinica_geral@gmail.com",
-				"itIs@Secret",
-				"itIs@Secret",
-				"Clinica Geral",
-				"719.963.390-44",
-				"17/07/1970",
-				"(81) 98342-2258");
+	void testAgendamentoPacienteExistente() throws Exception {
+		AgendamentoPacienteInput paciente = new AgendamentoPacienteInput("124.797.750-11", "Sr. Joao");
+
+		AgendamentoInput payload = new AgendamentoInput("17-07-2026 07:07:00", paciente);
 
 		MvcResult response = mockMvc
-				.perform(post(Constantes.rootPath.concat("/signup"))
+				.perform(post(Constantes.rootPath.concat("/attendance"))
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(payload)))
 				.andExpect(status().isCreated())

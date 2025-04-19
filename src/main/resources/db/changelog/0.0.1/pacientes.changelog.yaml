@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: pacientes_20250418-01
+      author: wesley.tamiarana@gmail.com
+      changes:
+        - createTable:
+            tableName: pacientes
+            columns:
+              - column:
+                  name: uuid
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: cpf
+                  type: VARCHAR(14)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: nome
+                  type: VARCHAR(255)

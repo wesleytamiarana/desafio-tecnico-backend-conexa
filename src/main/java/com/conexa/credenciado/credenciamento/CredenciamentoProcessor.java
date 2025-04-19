@@ -5,6 +5,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.extern.java.Log;
 @RequiredArgsConstructor(access = PROTECTED)
 public class CredenciamentoProcessor implements CredenciamentoProcess {
 
+	@Autowired
 	private final CredenciadoRepository credenciadoRepository;
 
 	@Override
