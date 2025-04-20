@@ -9,3 +9,5 @@ databaseChangeLog:
       file: db/changelog/0.0.1/pacientes.changelog.yaml
   - include:
       file: db/changelog/0.0.1/agendamentos.changelog.yaml
+  - include:
+      file: db/changelog/0.0.1/tokens.changelog.yaml

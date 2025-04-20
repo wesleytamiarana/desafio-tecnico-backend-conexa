@@ -1,17 +1,19 @@
 package com.conexa.credenciado.credenciamento;
 
+import static jakarta.persistence.CascadeType.MERGE;
+import static jakarta.persistence.CascadeType.REFRESH;
+import static jakarta.persistence.CascadeType.REMOVE;
+import static jakarta.persistence.TemporalType.DATE;
+import static java.util.Optional.ofNullable;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.conexa.seguranca.Credenciais;
-
-import static jakarta.persistence.CascadeType.*;
-import static java.util.Optional.ofNullable;
+import com.conexa.seguranca.credenciais.Credenciais;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,9 +23,9 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
-import static jakarta.persistence.TemporalType.DATE;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Entity
@@ -41,9 +43,10 @@ public class Credenciado {
 	private String cpf;
 
 	@Getter
+	@Setter
 	@Temporal(DATE)
 	@Column(name = "data_nascimento")
-	private Date dataNascimento;
+	private LocalDate dataNascimento;
 
 	@Getter
 	@Column(name = "telefone")
@@ -67,17 +70,6 @@ public class Credenciado {
 
 	public Credenciado cpf(final String cpf) {
 		this.cpf = trimToNull(cpf);
-		return this;
-	}
-
-
-	public Credenciado dataNascimento(final Date data) {
-		this.dataNascimento = data;
-		return this;
-	}
-
-
-	public Credenciado dataNascimento(final String data) {
 		return this;
 	}
 

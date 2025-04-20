@@ -33,7 +33,7 @@ public class CredenciamentoProcessor implements CredenciamentoProcess {
 				.map(credenciadoRepository::save)
 				.map(Credenciado::uuid);
 
-		credenciado.orElseThrow(() -> new IllegalArgumentException("Dados para credenciamento invalidos"));
+		credenciado.orElseThrow(() -> new IllegalArgumentException("credenciamento.dados.invalidos"));
 
 		return credenciado;
 	}

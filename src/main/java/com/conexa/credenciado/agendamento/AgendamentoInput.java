@@ -3,10 +3,12 @@ package com.conexa.credenciado.agendamento;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
+import java.time.LocalDateTime;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public record AgendamentoInput (
-		String dataHora,
+		LocalDateTime dataHora,
 		AgendamentoPacienteInput paciente) {
 
 	public String cpfPaciente() {

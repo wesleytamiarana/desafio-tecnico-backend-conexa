@@ -1,12 +1,9 @@
-package com.conexa.credenciado.agendamento;
+package com.conexa.seguranca.login;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.LocalDateTime;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestPropertySource(locations = "classpath:application-test.yaml")
-public class AgendamentoITest {
+public class LoginITest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -32,26 +29,16 @@ public class AgendamentoITest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	@Autowired
-	private  AgendamentoRepository agendamentoRepository;
-
-
-	@BeforeEach
-	void beforeEach() {
-		agendamentoRepository.deleteAll();
-	}
 
 	@Test
-	void testAgendamentoPacienteExistente() throws Exception {
-		AgendamentoPacienteInput paciente = new AgendamentoPacienteInput("124.797.750-11", "Sr. Joao");
-
-		AgendamentoInput payload = new AgendamentoInput(LocalDateTime.now().plusDays(1), paciente);
+	void testLoginExistente() throws Exception {
+		LoginInput payload = LoginInput.of("admin@cnx.com", "itIs@Secret");
 
 		MvcResult response = mockMvc
-				.perform(post(Constantes.rootPath.concat("/attendance"))
+				.perform(post(Constantes.rootPath.concat("/login"))
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(payload)))
-				.andExpect(status().isCreated())
+				.andExpect(status().isOk())
 				.andReturn();
 
 		assertThat(response.getResponse().getContentAsString())

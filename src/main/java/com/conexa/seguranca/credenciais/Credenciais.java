@@ -1,4 +1,4 @@
-package com.conexa.seguranca;
+package com.conexa.seguranca.credenciais;
 
 import static jakarta.persistence.GenerationType.UUID;
 import static lombok.AccessLevel.PROTECTED;

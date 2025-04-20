@@ -2,6 +2,8 @@ package com.conexa.credenciado.credenciamento;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
+import java.time.LocalDate;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public record CredenciamentoInput (
@@ -10,7 +12,7 @@ public record CredenciamentoInput (
 		String confirmacaoSenha,
 		String especialidade,
 		String cpf,
-		String dataNascimento,
+		LocalDate dataNascimento,
 		String telefone) {
 
 	@Override

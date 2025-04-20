@@ -20,7 +20,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
-import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -59,11 +58,6 @@ public class Agendamento {
 	}
 
 
-	public Agendamento dataHora(final String dataHora) {
-		return this;
-	}
-
-
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this, JSON_STYLE)
@@ -82,10 +76,5 @@ public class Agendamento {
 
 	public static Agendamento of(final Paciente paciente) {
 		return new Agendamento().paciente(paciente);
-	}
-
-
-	public static Agendamento agendadoPara(final String dataHora) {
-		return new Agendamento().dataHora(dataHora);
 	}
 }
