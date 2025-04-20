@@ -28,5 +28,5 @@ spring:
 application:
   security:
        token:
-         duration: 9000000
+         duration: 86400000 # 24h
          signature-key: 5EDEC8E55CBA5A46AAB7DDF7D85BA85C3FF46259CC2B09ED7FBC47F4F13456AC

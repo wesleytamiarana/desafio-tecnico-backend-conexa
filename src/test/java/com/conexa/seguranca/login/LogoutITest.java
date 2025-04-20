@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestPropertySource(locations = "classpath:application-test.yaml")
-public class LoginITest {
+public class LogoutITest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -38,9 +38,8 @@ public class LoginITest {
 	@Autowired
 	private TokenCacheManager tokenCacheManager;
 
-
 	@Test
-	void testLoginComCredenciaisValidas() throws Exception {
+	void testLogoutComCredenciaisValidas() throws Exception {
 		LoginInput payload = LoginInput.of("admin@cnx.com", "itIs@Secret");
 
 		MvcResult response = mockMvc
@@ -61,5 +60,12 @@ public class LoginITest {
 		.map(Token::valor)
 		.get()
 		.isEqualTo(result);
+
+		mockMvc.perform(post(Constantes.rootPath.concat("/logoff"))
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", result))
+		.andExpect(status().isOk());
+
+		assertThat(tokenCacheManager.get(payload.email())).isEmpty();
 	}
 }

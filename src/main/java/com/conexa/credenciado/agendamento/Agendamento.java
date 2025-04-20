@@ -5,7 +5,7 @@ import static jakarta.persistence.TemporalType.TIMESTAMP;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -37,9 +37,10 @@ public class Agendamento {
 	@GeneratedValue(strategy = UUID)
 	private String uuid;
 
+	@Setter
 	@Temporal(TIMESTAMP)
 	@Column(name = "data_hora")
-	private Date dataHora;
+	private LocalDateTime dataHora;
 
 	@Setter
 	@ManyToOne()
@@ -50,12 +51,6 @@ public class Agendamento {
 	@ManyToOne()
 	@JoinColumn(name = "uuid_paciente", referencedColumnName = "uuid")
 	private Paciente paciente;
-
-
-	public Agendamento dataHora(final Date dataHora) {
-		this.dataHora = dataHora;
-		return this;
-	}
 
 
 	@Override

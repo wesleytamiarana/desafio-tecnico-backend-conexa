@@ -60,7 +60,7 @@ public class AgendamentoProcessor implements AgendamentoProcess {
 
 		agendamento = Agendamento.of();
 
-		//input.map(AgendamentoInput::dataHora).ifPresent(agendamento::dataHora);
+		input.map(AgendamentoInput::dataHora).ifPresent(agendamento::dataHora);
 
 		credenciado.ifPresent(agendamento::medico);
 

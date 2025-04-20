@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.conexa.api.Constantes;
+import com.conexa.seguranca.login.LoginInput;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
@@ -43,18 +44,30 @@ public class AgendamentoITest {
 
 	@Test
 	void testAgendamentoPacienteExistente() throws Exception {
+		LoginInput credenciado = LoginInput.of("cardiologia@gmail.com", "itIs@Secret");
+
 		AgendamentoPacienteInput paciente = new AgendamentoPacienteInput("124.797.750-11", "Sr. Joao");
 
-		AgendamentoInput payload = new AgendamentoInput(LocalDateTime.now().plusDays(1), paciente);
+		AgendamentoInput agendemento = new AgendamentoInput(LocalDateTime.now().plusDays(1), paciente);
 
-		MvcResult response = mockMvc
+		MvcResult loginResponse = mockMvc
+				.perform(post(Constantes.rootPath.concat("/login"))
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(credenciado)))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		String token = loginResponse.getResponse().getContentAsString();
+
+		MvcResult agendamentoResponse = mockMvc
 				.perform(post(Constantes.rootPath.concat("/attendance"))
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(payload)))
+						.header("Authorization", token)
+						.content(objectMapper.writeValueAsString(agendemento)))
 				.andExpect(status().isCreated())
 				.andReturn();
 
-		assertThat(response.getResponse().getContentAsString())
+		assertThat(agendamentoResponse.getResponse().getContentAsString())
 		.isNotNull()
 		.isNotBlank();
 	}

@@ -53,13 +53,4 @@ public class DatabaseSchemaITest {
 			assertTrue(rs.next(), "Tabela AGENDAMENTOS deve existir.");
 		}
 	}
-
-
-	@Test
-	void tabelaDeTokenDeveExistir() throws Exception {
-		try (Connection conn = dataSource.getConnection()) {
-			ResultSet rs = conn.getMetaData().getTables(null, null, "TOKENS", null);
-			assertTrue(rs.next(), "Tabela TOKENS deve existir.");
-		}
-	}
 }
