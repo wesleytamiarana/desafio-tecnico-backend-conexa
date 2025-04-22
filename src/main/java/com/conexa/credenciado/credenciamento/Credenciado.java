@@ -1,17 +1,27 @@
 package com.conexa.credenciado.credenciamento;
 
+import static com.conexa.credenciado.credenciamento.CredenciadoMessages.cpfObrigatorio;
+import static com.conexa.credenciado.credenciamento.CredenciadoMessages.cpfTananhoInvalido;
+import static com.conexa.credenciado.credenciamento.CredenciadoMessages.credenciaisObrigatorias;
+import static com.conexa.credenciado.credenciamento.CredenciadoMessages.dataNascimentoObrigatoria;
+import static com.conexa.credenciado.credenciamento.CredenciadoMessages.especialidadeObrigatoria;
+import static com.conexa.credenciado.credenciamento.CredenciadoMessages.telefoneObrigatorio;
 import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.CascadeType.REFRESH;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.TemporalType.DATE;
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Optional.ofNullable;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.validator.constraints.Length;
 
 import com.conexa.seguranca.credenciais.Credenciais;
 
@@ -23,9 +33,12 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
+import jakarta.persistence.Transient;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Entity
@@ -34,31 +47,40 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 public class Credenciado {
 
+	@Transient
+	private final DateTimeFormatter formatadorData = ofPattern("dd/MM/yyyy");
+
 	@Id
 	@Getter
 	private String uuid;
 
 	@Getter
 	@Column(name = "cpf")
+	@NotBlank(message = cpfObrigatorio)
+	@Length(min = 12, max = 14, message = cpfTananhoInvalido)
 	private String cpf;
 
 	@Getter
-	@Setter
 	@Temporal(DATE)
 	@Column(name = "data_nascimento")
+	@NotNull(message = dataNascimentoObrigatoria)
 	private LocalDate dataNascimento;
 
 	@Getter
 	@Column(name = "telefone")
+	@NotBlank(message = telefoneObrigatorio)
 	private String telefone;
 
 	@Getter
 	@Column(name = "especialidade")
+	@NotBlank(message = especialidadeObrigatoria)
 	private String especialidade;
 
 	@MapsId
+	@Valid
 	@OneToOne(cascade = { MERGE, REFRESH, REMOVE })
 	@JoinColumn(name = "uuid")
+	@NotNull(message = credenciaisObrigatorias)
 	private Credenciais credenciais;
 
 
@@ -71,6 +93,22 @@ public class Credenciado {
 	public Credenciado cpf(final String cpf) {
 		this.cpf = trimToNull(cpf);
 		return this;
+	}
+
+
+	public Credenciado dataNascimento(final LocalDate dataHora) {
+		this.dataNascimento = dataHora;
+		return this;
+	}
+
+
+	public Credenciado dataNascimento(final Optional<String> dataHora) {
+		return this.dataNascimento(dataHora.map(formatadorData::parse).map(LocalDate::from).orElse(null));
+	}
+
+
+	public Credenciado dataNascimento(final String dataHora) {
+		return this.dataNascimento(ofNullable(trimToNull(dataHora)));
 	}
 
 

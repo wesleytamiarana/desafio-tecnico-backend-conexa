@@ -4,7 +4,9 @@ import static com.conexa.api.Constantes.rootPath;
 import static lombok.AccessLevel.PROTECTED;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 
 
+@Validated
 @RestController
 @RequestMapping(rootPath)
 @NoArgsConstructor(access = PROTECTED)
@@ -24,10 +27,10 @@ public class LoginResource {
 
 
 	@PostMapping(path = { "/login" })
-	public ResponseEntity<String> efetuar(@Valid @RequestBody final LoginInput request) {
+	public ResponseEntity<LoginOutput> efetuar(@Valid @RequestBody final LoginInput request) {
 		return loginProcess
 				.process(request)
 				.map(ResponseEntity::ok)
-				.orElseGet(() -> ResponseEntity.notFound().build());
+				.orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN).build());
 	}
 }

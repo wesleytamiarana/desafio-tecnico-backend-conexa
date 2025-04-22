@@ -1,4 +1,4 @@
-package com.conexa.seguranca.login;
+package com.conexa.seguranca.logout;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.conexa.api.Constantes;
-import com.conexa.seguranca.token.Token;
+import com.conexa.seguranca.login.LoginInput;
 import com.conexa.seguranca.token.TokenCacheManager;
 import com.conexa.seguranca.token.TokenReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,32 +40,34 @@ public class LogoutITest {
 
 	@Test
 	void testLogoutComCredenciaisValidas() throws Exception {
-		LoginInput payload = LoginInput.of("admin@cnx.com", "itIs@Secret");
+		String token;
 
-		MvcResult response = mockMvc
+		MvcResult response;
+
+		LoginInput payload = LoginInput.of("master02@cnx.com", "itIs@Secret");
+
+		response = mockMvc
 				.perform(post(Constantes.rootPath.concat("/login"))
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(payload)))
 				.andExpect(status().isOk())
 				.andReturn();
 
-		String result = response.getResponse().getContentAsString();
+		token = response.getResponse().getContentAsString();
 
-		assertThat(tokenReader.email(result))
+		assertThat(tokenReader.email(token))
 		.isNotEmpty()
 		.get()
 		.isEqualTo(payload.email());
 
-		assertThat(tokenCacheManager.get(payload.email()))
-		.map(Token::valor)
-		.get()
-		.isEqualTo(result);
-
 		mockMvc.perform(post(Constantes.rootPath.concat("/logoff"))
 				.contentType(MediaType.APPLICATION_JSON)
-				.header("Authorization", result))
+				.header("Authorization", token))
 		.andExpect(status().isOk());
 
-		assertThat(tokenCacheManager.get(payload.email())).isEmpty();
+		assertThat(tokenCacheManager.find(token))
+		.isNotEmpty()
+		.get()
+		.isEqualTo(token);
 	}
 }

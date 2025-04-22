@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +30,8 @@ public class CredenciamentoITest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	@Autowired
-	private  CredenciadoRepository credenciadoRepository;
-
-
 	@BeforeEach
-	void beforeEach() {
-		credenciadoRepository.deleteAll();
-	}
+	void beforeEach() {}
 
 	@Test
 	void testCredenciamentoComDadosValidos() throws Exception {
@@ -47,8 +39,8 @@ public class CredenciamentoITest {
 				"itIs@Secret",
 				"itIs@Secret",
 				"Clinica Geral",
-				"719.963.390-44",
-				LocalDate.now(),
+				"124.797.750-11",
+				"07/07/1970",
 				"(81) 98342-2258");
 
 		MvcResult response = mockMvc

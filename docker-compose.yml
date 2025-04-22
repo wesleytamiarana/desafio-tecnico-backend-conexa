@@ -1,0 +1,52 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: cnx-db
+    environment:
+      MYSQL_DATABASE: cnx_db
+      MYSQL_USER: cnx
+      MYSQL_PASSWORD: itIs@Secret
+      MYSQL_ROOT_PASSWORD: itIs@Secret
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    volumes:
+      - cnx-data:/var/lib/mysql
+    networks:
+      - cnx-net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: cnx-db
+      PMA_USER: cnx
+      PMA_PASSWORD: itIs@Secret
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - cnx-net
+
+  app:
+    build: .
+    container_name: cnx-app
+    depends_on:
+      - mysql
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_USERNAME: cnx
+      SPRING_DATASOURCE_PASSWORD: itIs@Secret
+      SPRING_DATASOURCE_URL: jdbc:mysql://cnx-db:3306/cnx_db
+    ports:
+      - "8080:8080"
+    restart: on-failure:3
+    networks:
+      - cnx-net
+
+volumes:
+  cnx-data:
+
+networks:
+  cnx-net:

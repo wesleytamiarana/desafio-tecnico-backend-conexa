@@ -15,8 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.conexa.api.Constantes;
-import com.conexa.seguranca.token.Token;
-import com.conexa.seguranca.token.TokenCacheManager;
 import com.conexa.seguranca.token.TokenReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,13 +33,10 @@ public class LoginITest {
 	@Autowired
 	private TokenReader tokenReader;
 
-	@Autowired
-	private TokenCacheManager tokenCacheManager;
-
 
 	@Test
 	void testLoginComCredenciaisValidas() throws Exception {
-		LoginInput payload = LoginInput.of("admin@cnx.com", "itIs@Secret");
+		LoginInput payload = LoginInput.of("master01@cnx.com", "itIs@Secret");
 
 		MvcResult response = mockMvc
 				.perform(post(Constantes.rootPath.concat("/login"))
@@ -50,16 +45,13 @@ public class LoginITest {
 				.andExpect(status().isOk())
 				.andReturn();
 
-		String result = response.getResponse().getContentAsString();
+		String token =  objectMapper
+				.readValue(response.getResponse().getContentAsString(), LoginOutput.class)
+				.token();
 
-		assertThat(tokenReader.email(result))
+		assertThat(tokenReader.email(token))
 		.isNotEmpty()
 		.get()
 		.isEqualTo(payload.email());
-
-		assertThat(tokenCacheManager.get(payload.email()))
-		.map(Token::valor)
-		.get()
-		.isEqualTo(result);
 	}
 }

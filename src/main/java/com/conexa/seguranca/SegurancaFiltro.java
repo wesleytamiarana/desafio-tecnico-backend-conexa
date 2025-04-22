@@ -13,15 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.conexa.seguranca.token.Token;
 import com.conexa.seguranca.token.TokenCacheManager;
 import com.conexa.seguranca.token.TokenReader;
+import com.conexa.seguranca.token.exceptions.TokenExpiradoException;
+import com.conexa.seguranca.token.exceptions.TokenRevogadoException;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -29,6 +29,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
+
 
 @Component
 @NoArgsConstructor(access = PROTECTED)
@@ -69,31 +70,25 @@ public class SegurancaFiltro extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain chain) throws ServletException, IOException {
-		Optional<String> autorizationHeader = this.autorizationHeader(ofNullable(request));
+		Optional<String> token = this.autorizationHeader(ofNullable(request));
 
-		if(autorizationHeader.isPresent()) {
-			Token token = null;
-
+		if(token.isPresent()) {
 			Optional<String> email;
 
 			if(isNull(SecurityContextHolder.getContext().getAuthentication())) {
-				email = autorizationHeader.flatMap(tokenReader::email);
-
-				token = email
-						.flatMap(tokenCacheManager::get)
-						.orElseThrow(() -> new RuntimeException("seguranca.token.nao.encontrado"));
-
 				try {
-					tokenReader
-					.email(token)
+					email = token.flatMap(tokenReader::email);
+
+					token
+					.flatMap(tokenCacheManager::find)
+					.ifPresent(source -> { throw new TokenRevogadoException("seguranca.token.revogado"); });
+
+					email
 					.map(userDetailsService::loadUserByUsername)
 					.map(source -> new UsernamePasswordAuthenticationToken(source, null, source.getAuthorities()))
 					.ifPresent(auth -> atualizarContexto(request, auth));
-
 				} catch (ExpiredJwtException e) {
-					tokenCacheManager.evict(token);
-
-					throw new RuntimeException("seguranca.token.expirado");
+					throw new TokenExpiradoException("seguranca.token.expirado");
 				}
 			}
 		}

@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.conexa.credenciado.credenciamento.Credenciado;
 import com.conexa.credenciado.credenciamento.CredenciadoRepository;
@@ -16,11 +17,13 @@ import com.conexa.paciente.Paciente;
 import com.conexa.paciente.PacienteRepository;
 import com.conexa.seguranca.credenciais.CredenciaisService;
 
+import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 @Log
 @Service
+@Validated
 @NoArgsConstructor(access = PROTECTED)
 public class AgendamentoProcessor implements AgendamentoProcess {
 
@@ -71,7 +74,7 @@ public class AgendamentoProcessor implements AgendamentoProcess {
 
 
 	@Override
-	public Optional<String> process(final AgendamentoInput input) {
+	public Optional<String> process(@Valid final AgendamentoInput input) {
 		return this.process(ofNullable(input)).map(Agendamento::uuid);
 	}
 }

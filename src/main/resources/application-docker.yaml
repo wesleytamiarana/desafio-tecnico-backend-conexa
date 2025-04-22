@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: cnx
+
+  messages:
+    encoding: UTF-8
+    basename: messages
+    
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
+  datasource:
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+
+  liquibase:
+    enabled: true
+    user: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    change-log: classpath:/db/changelog/master.changelog.yaml
+
+  h2:
+    console:
+      enabled: false
+
+  jpa:
+    show-sql: true
+    hibernate.ddl-auto: none
+
+application:
+  security:
+       token:
+          duration: 3600000
+          signature-key: 5EDEC8E55CBA5A46AAB7DDF7D85BA85C3FF46259CC2B09ED7FBC47F4F13456AC
+

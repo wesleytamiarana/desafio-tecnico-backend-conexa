@@ -13,35 +13,33 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
-import com.conexa.seguranca.credenciais.Credenciais;
+import com.conexa.api.excecoes.ProcessException;
 import com.conexa.seguranca.credenciais.CredenciaisRepository;
-import com.conexa.seguranca.token.Token;
-import com.conexa.seguranca.token.TokenCacheManager;
 import com.conexa.seguranca.token.TokenGenerator;
 
-import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 @Log
 @Service
+@Validated
 @NoArgsConstructor(access = PROTECTED)
 public class LoginProcessor implements LoginProcess {
-
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
-
-	@Autowired
-	private TokenCacheManager tokenCacheManager;
 
 	@Autowired
 	private TokenGenerator tokenGenerator;
 
 
 	@Autowired
+	private AuthenticationManager authenticationManager;
+
+
+	@Autowired
 	private CredenciaisRepository credenciaisRepository;
+
 
 	private Optional<Authentication> autenticar(final UsernamePasswordAuthenticationToken input) {
 		Optional<Authentication> autenticacao = ofNullable(input).map(authenticationManager::authenticate);
@@ -57,51 +55,27 @@ public class LoginProcessor implements LoginProcess {
 	}
 
 
-	private Optional<Authentication> autenticar(final LoginInput input) {
-		return ofNullable(input).flatMap(source -> this.autenticar(source.email(), source.senha()));
-	}
+	private  Optional<LoginOutput> process(final Optional<LoginInput> input) {
+		input.orElseThrow(() -> new ProcessException("login.credenciais.obrigatorias"));
 
+		input
+		.map(LoginInput::email)
+		.flatMap(credenciaisRepository::findByEmail)
+		.orElseThrow(() ->  new ProcessException("login.credenciais.nao.encontradas"));
 
-	private Optional<String> gerarToken(final String input) {
-		Optional<String> subject = ofNullable(input);
-
-		subject.orElseThrow(() -> new IllegalArgumentException("securanca.token.geracao.subject.required"));
-
-		Optional<Token> token = subject.flatMap(tokenCacheManager::get);
-
-		if(!token.isPresent()) {
-			Credenciais credenciais = subject
-					.flatMap(credenciaisRepository::findByEmail)
-					.orElseThrow(() ->  new RuntimeException("securanca.token.geracao.credenciais.nao.encontradas"));
-
-			token = subject.flatMap(tokenGenerator::generate).map(valor -> Token.of(credenciais, valor));
-		}
-
-		try {
-			token = token.flatMap(source -> tokenGenerator.extender(source).map(source::valor));
-		} catch (ExpiredJwtException e) {
-			token = token.flatMap(source -> tokenGenerator.generate(source.email()).map(source::valor));
-		}
-
-
-		return token.flatMap(tokenCacheManager::put).map(Token::valor);
-	}
-
-
-	private  Optional<String> process(final Optional<LoginInput> input) {
-		input.orElseThrow(() -> new IllegalArgumentException("seguranca.login.dados.requeridos"));
-
-		return input
-				.flatMap(this::autenticar)
+		Optional<String> token = input
+				.flatMap(source -> this.autenticar(source.email(), source.senha()))
 				.map(Authentication::getPrincipal)
 				.map(UserDetails.class::cast)
 				.map(UserDetails::getUsername)
-				.flatMap(this::gerarToken);
+				.flatMap(tokenGenerator::generate);
+
+		return token.map(LoginOutput::of);
 	}
 
 
 	@Override
-	public Optional<String> process(final LoginInput input) {
+	public Optional<LoginOutput> process(@Valid final LoginInput input) {
 		return this.process(ofNullable(input));
 	}
 }

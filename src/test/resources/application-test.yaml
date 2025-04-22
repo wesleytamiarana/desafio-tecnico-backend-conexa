@@ -2,6 +2,10 @@ spring:
   application:
     name: cnx
 
+  messages:
+      encoding: UTF-8
+      basename: messages
+
 #  autoconfigure:
 #    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 
@@ -22,11 +26,12 @@ spring:
       enabled: false
 
   jpa:
-      show-sql: false
+      show-sql: true
       hibernate.ddl-auto: none
 
 application:
   security:
        token:
-         duration: 9000000
-         signature-key: 5EDEC8E55CBA5A46AAB7DDF7D85BA85C3FF46259CC2B09ED7FBC47F4F13456AC
+          duration: 3600000
+          signature-key: 5EDEC8E55CBA5A46AAB7DDF7D85BA85C3FF46259CC2B09ED7FBC47F4F13456AC
+

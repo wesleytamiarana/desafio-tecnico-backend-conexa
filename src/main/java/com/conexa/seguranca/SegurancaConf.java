@@ -15,6 +15,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -47,7 +48,7 @@ public class SegurancaConf {
 
 	@Bean
 	CacheManager cacheManagerBean() {
-		return new ConcurrentMapCacheManager("tokens");
+		return new ConcurrentMapCacheManager();
 	}
 
 
@@ -74,11 +75,16 @@ public class SegurancaConf {
 		return provider;
 	}
 
+
 	@Bean
-	SecurityFilterChain securityFilterChainBean(final HttpSecurity builder, final AuthenticationProvider provider, final SegurancaFiltro filter) throws Exception {
+	SecurityFilterChain securityFilterChainBean(final HttpSecurity builder,
+			final AuthenticationProvider provider,
+			final SegurancaFiltro filter,
+			final SegurancaAuthEntryPoint authEntryPoint,
+			final SegurancaAccesDeniedHandler accessDeniedHandler) throws Exception {
 		return builder
 				.csrf(CsrfConfigurer::disable)
-				//.httpBasic(withDefaults())
+				.httpBasic(Customizer.withDefaults())
 				.authenticationProvider(provider)
 				.sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
 				.authorizeHttpRequests(auth -> auth
@@ -87,6 +93,10 @@ public class SegurancaConf {
 						.requestMatchers(POST, "/api/v1/logoff").permitAll()
 						.anyRequest().authenticated())
 				.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+				.exceptionHandling(customizer -> customizer
+						.authenticationEntryPoint(authEntryPoint)
+						.accessDeniedHandler(accessDeniedHandler)
+						)
 				.build();
 	}
 

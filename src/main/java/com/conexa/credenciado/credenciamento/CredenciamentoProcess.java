@@ -2,7 +2,9 @@ package com.conexa.credenciado.credenciamento;
 
 import java.util.Optional;
 
+import jakarta.validation.Valid;
+
 public interface CredenciamentoProcess {
 
-	public Optional<String> process(final CredenciamentoInput input);
+	public Optional<String> process(@Valid final CredenciamentoInput input);
 }

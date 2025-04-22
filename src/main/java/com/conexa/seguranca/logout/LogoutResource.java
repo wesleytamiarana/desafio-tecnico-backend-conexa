@@ -5,6 +5,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 
 
+@Validated
 @RestController
 @RequestMapping(rootPath)
 @NoArgsConstructor(access = PROTECTED)

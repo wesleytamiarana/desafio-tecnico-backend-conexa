@@ -1,5 +1,7 @@
 package com.conexa.seguranca.credenciais;
 
+import static com.conexa.seguranca.credenciais.CredenciaisMessages.emailObrigatorio;
+import static com.conexa.seguranca.credenciais.CredenciaisMessages.senhaObrigatoria;
 import static jakarta.persistence.GenerationType.UUID;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
@@ -12,7 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,10 +33,11 @@ public class Credenciais {
 	@GeneratedValue(strategy = UUID)
 	private String uuid;
 
+	@NotBlank(message = emailObrigatorio)
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
-	@NotNull
+	@NotBlank(message = senhaObrigatoria)
 	@Column(name = "senha", nullable = false)
 	private String senha;
 

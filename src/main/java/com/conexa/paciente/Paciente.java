@@ -1,17 +1,22 @@
 package com.conexa.paciente;
 
+import static com.conexa.paciente.PacienteMessages.cpfObrigatorio;
+import static com.conexa.paciente.PacienteMessages.cpfTananhoInvalido;
+import static com.conexa.paciente.PacienteMessages.nomeObrigatorio;
 import static jakarta.persistence.GenerationType.UUID;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.validator.constraints.Length;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -29,10 +34,13 @@ public class Paciente {
 	private String uuid;
 
 	@Getter
+	@NotBlank(message = cpfObrigatorio)
+	@Length(min = 12, max = 14, message = cpfTananhoInvalido)
 	@Column(name = "cpf", nullable = false, unique = true)
 	private String cpf;
 
 	@Getter
+	@NotBlank(message = nomeObrigatorio)
 	@Column(name = "nome", nullable = false)
 	private String nome;
 

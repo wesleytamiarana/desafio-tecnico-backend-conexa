@@ -29,7 +29,6 @@ databaseChangeLog:
                   name: data_hora
                   type: DATETIME
                   constraints:
-                    unique: true
                     nullable: false
 
   - changeSet:

@@ -1,10 +1,12 @@
 package com.conexa.credenciado.agendamento;
 
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +38,7 @@ public class AgendamentoITest {
 	@Autowired
 	private  AgendamentoRepository agendamentoRepository;
 
+	private final DateTimeFormatter formatadorData =  ofPattern("yyyy-MM-dd HH:mm:ss");
 
 	@BeforeEach
 	void beforeEach() {
@@ -44,11 +47,13 @@ public class AgendamentoITest {
 
 	@Test
 	void testAgendamentoPacienteExistente() throws Exception {
+		String dataAgendamento = LocalDateTime.now().plusDays(1).format(formatadorData);
+
 		LoginInput credenciado = LoginInput.of("cardiologia@gmail.com", "itIs@Secret");
 
 		AgendamentoPacienteInput paciente = new AgendamentoPacienteInput("124.797.750-11", "Sr. Joao");
 
-		AgendamentoInput agendemento = new AgendamentoInput(LocalDateTime.now().plusDays(1), paciente);
+		AgendamentoInput agendemento = new AgendamentoInput(dataAgendamento, paciente);
 
 		MvcResult loginResponse = mockMvc
 				.perform(post(Constantes.rootPath.concat("/login"))

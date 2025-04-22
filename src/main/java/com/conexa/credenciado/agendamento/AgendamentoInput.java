@@ -1,14 +1,27 @@
 package com.conexa.credenciado.agendamento;
 
+import static com.conexa.credenciado.agendamento.AgendamentoMessages.*;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
-import java.time.LocalDateTime;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.validator.constraints.Length;
+
+import com.conexa.api.validador.constraints.DataFutura;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record AgendamentoInput (
-		LocalDateTime dataHora,
+
+		@NotBlank(message = dataAgendamentoObrigatoria)
+		@Length(min = 16, message = dataAgendamentoTamanhoInvalido)
+		@DataFutura(message = dataAgendamentoPrazoInvalido)
+		String dataHora,
+
+		@Valid
+		@NotNull(message = pacienteObrigatorio )
 		AgendamentoPacienteInput paciente) {
 
 	public String cpfPaciente() {
