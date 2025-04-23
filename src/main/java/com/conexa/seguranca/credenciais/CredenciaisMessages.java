@@ -10,4 +10,6 @@ public final class CredenciaisMessages {
 	public static final String senhaObrigatoria = "credenciais.senha.obrigatoria";
 
 	public static final String emailObrigatorio = "credenciais.email.obrigatorio";
+
+	public static final String emailInvalido = "credenciais.email.invalido";
 }

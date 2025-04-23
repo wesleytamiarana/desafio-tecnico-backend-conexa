@@ -1,15 +1,18 @@
 package com.conexa.paciente;
 
-import static com.conexa.paciente.PacienteMessages.cpfObrigatorio;
+import static com.conexa.paciente.PacienteMessages.*;
 import static com.conexa.paciente.PacienteMessages.cpfTananhoInvalido;
 import static com.conexa.paciente.PacienteMessages.nomeObrigatorio;
 import static jakarta.persistence.GenerationType.UUID;
+import static java.util.Optional.ofNullable;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.Length;
+
+import com.conexa.api.validador.constraints.CPF;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,8 +37,9 @@ public class Paciente {
 	private String uuid;
 
 	@Getter
+	@CPF(message = cpfInvalido)
 	@NotBlank(message = cpfObrigatorio)
-	@Length(min = 12, max = 14, message = cpfTananhoInvalido)
+	@Length(min = 11, max = 14, message = cpfTananhoInvalido)
 	@Column(name = "cpf", nullable = false, unique = true)
 	private String cpf;
 
@@ -46,7 +50,9 @@ public class Paciente {
 
 
 	public Paciente cpf(final String cpf) {
-		this.cpf = trimToNull(cpf);
+		this.cpf = ofNullable(trimToNull(cpf))
+				.map(source -> source.replaceAll("[^\\d]", ""))
+				.orElse(null);
 		return this;
 	}
 

@@ -13,6 +13,8 @@ public abstract class AbstractInputTest {
 
 	private Validator validador;
 
+	protected static final String cpfValido = "07876008062";
+
 	@BeforeEach
 	void beforeEach() {
 		validador = Validation

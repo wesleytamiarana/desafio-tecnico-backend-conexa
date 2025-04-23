@@ -1,13 +1,16 @@
 package com.conexa.credenciado.agendamento;
 
-import static com.conexa.credenciado.agendamento.AgendamentoMessages.*;
+import static com.conexa.credenciado.agendamento.AgendamentoMessages.dataAgendamentoObrigatoria;
+import static com.conexa.credenciado.agendamento.AgendamentoMessages.dataAgendamentoPrazoInvalido;
+import static com.conexa.credenciado.agendamento.AgendamentoMessages.dataAgendamentoTamanhoInvalido;
+import static com.conexa.credenciado.agendamento.AgendamentoMessages.pacienteObrigatorio;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.Length;
 
-import com.conexa.api.validador.constraints.DataFutura;
+import com.conexa.api.validador.constraints.Data;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -17,7 +20,7 @@ public record AgendamentoInput (
 
 		@NotBlank(message = dataAgendamentoObrigatoria)
 		@Length(min = 16, message = dataAgendamentoTamanhoInvalido)
-		@DataFutura(message = dataAgendamentoPrazoInvalido)
+		@Data.Futura(message = dataAgendamentoPrazoInvalido)
 		String dataHora,
 
 		@Valid

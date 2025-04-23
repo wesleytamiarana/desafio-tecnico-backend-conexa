@@ -9,6 +9,8 @@ public final class CredenciamentoMessages {
 
 	public static final String dadosObrigatorios = "credenciamento.dados.obrigatorio";
 
+	public static final String emailInvalido = "credenciamento.email.invalido";
+
 	public static final String emailObrigatorio = "credenciamento.email.obrigatorio";
 
 	public static final String credenciadoExistente = "credenciamento.credenciado.com.email.or.cpf.cadastrado";
@@ -23,11 +25,13 @@ public final class CredenciamentoMessages {
 
 	public static final String especialidadeObrigatoria = "credenciamento.especialidade.obrigatoria";
 
+	public static final String cpfInvalido =	"credenciamento.cpf.invalido";
+
 	public static final String cpfObrigatorio = "credenciamento.cpf.obrigatorio";
 
 	public static final String cpfTananhoInvalido =	"credenciamento.cpf.tamanho.invalido";
 
-	public static final String dataNascimentoFormatoInvalido = "credenciamento.data.nascimento.formato.invalido";
+	public static final String dataNascimentoInvalida = "credenciamento.data.nascimento.invalida";
 
 	public static final String dataNascimentoTamanhoInvalido = "credenciamento.data.nascimento.tamanho.invalido";
 

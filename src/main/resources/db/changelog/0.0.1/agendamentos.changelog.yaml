@@ -23,9 +23,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: cpf
-                  type: VARCHAR(14)
-              - column:
                   name: data_hora
                   type: DATETIME
                   constraints:
@@ -34,6 +31,18 @@ databaseChangeLog:
   - changeSet:
       id: agendamentos_20250418-02
       author: wesley.tamiarana@gmail.com
+      preConditions:
+        - and:
+            - tableExists:
+                tableName: agendamentos
+            - columnExists:
+               tableName: agendamentos
+               columnName: uuid_credenciado
+            - tableExists:
+                tableName: credenciados
+            - columnExists:
+                 tableName: credenciados
+                 columnName: uuid
       changes:
         - addForeignKeyConstraint:
             baseTableName: agendamentos
@@ -43,8 +52,20 @@ databaseChangeLog:
             constraintName: agendamentos-FK_01
 
   - changeSet:
-      id: adendamentos_20250418-03
+      id: agendamentos_20250418-03
       author: wesley.tamiarana@gmail.com
+      preConditions:
+        - and:
+             - tableExists:
+                 tableName: agendamentos
+             - columnExists:
+                 tableName: agendamentos
+                 columnName: uuid_paciente
+             - tableExists:
+                 tableName: pacientes
+             - columnExists:
+                 tableName: pacientes
+                 columnName: uuid
       changes:
         - addForeignKeyConstraint:
             baseTableName: agendamentos
@@ -52,3 +73,15 @@ databaseChangeLog:
             referencedTableName: pacientes
             referencedColumnNames: uuid
             constraintName: agendamentos-FK_02
+
+#  - changeSet:
+#      id: agendamentos_20250418-04
+#      author: wesley.tamiarana@gmail.com
+#      preConditions:
+#        - tableExists:
+#            tableName: agendamentos
+#      changes:
+#        - addUniqueConstraint:
+#            tableName: agendamentos
+#            columnNames: uuid_credenciado, uuid_paciente, data_hora
+#            constraintName: agendamentos-UNQ_01

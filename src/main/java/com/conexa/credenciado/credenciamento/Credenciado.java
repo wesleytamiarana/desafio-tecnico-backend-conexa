@@ -1,6 +1,6 @@
 package com.conexa.credenciado.credenciamento;
 
-import static com.conexa.credenciado.credenciamento.CredenciadoMessages.cpfObrigatorio;
+import static com.conexa.credenciado.credenciamento.CredenciadoMessages.*;
 import static com.conexa.credenciado.credenciamento.CredenciadoMessages.cpfTananhoInvalido;
 import static com.conexa.credenciado.credenciamento.CredenciadoMessages.credenciaisObrigatorias;
 import static com.conexa.credenciado.credenciamento.CredenciadoMessages.dataNascimentoObrigatoria;
@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.Length;
 
+import com.conexa.api.validador.constraints.CPF;
 import com.conexa.seguranca.credenciais.Credenciais;
 
 import jakarta.persistence.Column;
@@ -55,9 +56,10 @@ public class Credenciado {
 	private String uuid;
 
 	@Getter
-	@Column(name = "cpf")
+	@CPF(message = cpfInvalido)
 	@NotBlank(message = cpfObrigatorio)
-	@Length(min = 12, max = 14, message = cpfTananhoInvalido)
+	@Length(min = 11, max = 14, message = cpfTananhoInvalido)
+	@Column(name = "cpf", nullable = false, unique = true)
 	private String cpf;
 
 	@Getter
@@ -91,7 +93,9 @@ public class Credenciado {
 
 
 	public Credenciado cpf(final String cpf) {
-		this.cpf = trimToNull(cpf);
+		this.cpf = ofNullable(trimToNull(cpf))
+				.map(source -> source.replaceAll("[^\\d]", ""))
+				.orElse(null);
 		return this;
 	}
 
@@ -102,7 +106,7 @@ public class Credenciado {
 	}
 
 
-	public Credenciado dataNascimento(final Optional<String> dataHora) {
+	private Credenciado dataNascimento(final Optional<String> dataHora) {
 		return this.dataNascimento(dataHora.map(formatadorData::parse).map(LocalDate::from).orElse(null));
 	}
 
@@ -113,7 +117,9 @@ public class Credenciado {
 
 
 	public Credenciado telefone(final String telefone) {
-		this.telefone = telefone;
+		this.telefone = ofNullable(trimToNull(telefone))
+				.map(source -> source.replaceAll("[^\\d]", ""))
+				.orElse(null);
 		return this;
 	}
 

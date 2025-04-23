@@ -16,6 +16,8 @@ public final class AgendamentoMessages {
 
 		public static final String cpfTananhoInvalido = "agendamento.paciente.cpf.tamanho.invalido";
 
+		public static final String cpfInvalido = "agendamento.paciente.cpf.invalido";
+
 		public static final String nomeObrigatorio = "agendamento.paciente.nome.obrigatorio";
 	}
 
@@ -29,8 +31,6 @@ public final class AgendamentoMessages {
 	public static final String dataAgendamentoObrigatoria = "agendamento.data.obrigatoria";
 
 	public static final String	dataAgendamentoTamanhoInvalido = "agendamento.data.tamanho.invalido";
-
-	public static final String	dataAgendamentoFormatoInvalido = "agendamento.data.formato.invalido";
 
 	public static final String	dataAgendamentoPrazoInvalido = "agendamento.data.prazo.invalido";
 

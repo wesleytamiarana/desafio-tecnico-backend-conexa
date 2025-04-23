@@ -31,6 +31,18 @@ databaseChangeLog:
   - changeSet:
       id: credenciados_20250417-02
       author: wesley.tamiarana@gmail.com
+      preConditions:
+        - and:
+             - tableExists:
+                 tableName: credenciados
+             - columnExists:
+                 tableName: credenciados
+                 columnName: uuid
+             - tableExists:
+                 tableName: credenciais
+             - columnExists:
+                 tableName: credenciais
+                 columnName: uuid
       changes:
         - addForeignKeyConstraint:
             baseTableName: credenciados

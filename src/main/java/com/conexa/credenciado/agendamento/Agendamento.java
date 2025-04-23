@@ -1,23 +1,23 @@
 package com.conexa.credenciado.agendamento;
 
-import static com.conexa.credenciado.agendamento.AgendamentoMessages.*;
+import static com.conexa.api.validador.constraints.Data.defaultDateAndTimeFormatter;
+import static com.conexa.credenciado.agendamento.AgendamentoMessages.credenciadoObrigatorio;
 import static com.conexa.credenciado.agendamento.AgendamentoMessages.dataAgendamentoObrigatoria;
+import static com.conexa.credenciado.agendamento.AgendamentoMessages.dataAgendamentoPrazoInvalido;
 import static com.conexa.credenciado.agendamento.AgendamentoMessages.pacienteObrigatorio;
 import static jakarta.persistence.GenerationType.UUID;
 import static jakarta.persistence.TemporalType.TIMESTAMP;
-import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Optional.ofNullable;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.conexa.api.validador.constraints.DataFutura;
+import com.conexa.api.validador.constraints.Data;
 import com.conexa.credenciado.credenciamento.Credenciado;
 import com.conexa.paciente.Paciente;
 
@@ -29,7 +29,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
-import jakarta.persistence.Transient;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -44,9 +43,6 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 public class Agendamento {
 
-	@Transient
-	private final DateTimeFormatter formatadorData =  ofPattern("yyyy-MM-dd HH:mm:ss");
-
 	@Id
 	@Column(name = "uuid")
 	@GeneratedValue(strategy = UUID)
@@ -55,7 +51,7 @@ public class Agendamento {
 	@Temporal(TIMESTAMP)
 	@Column(name = "data_hora")
 	@NotNull(message = dataAgendamentoObrigatoria)
-	@DataFutura(message = dataAgendamentoPrazoInvalido)
+	@Data.Futura(message = dataAgendamentoPrazoInvalido)
 	private LocalDateTime dataHora;
 
 	@Valid
@@ -65,6 +61,7 @@ public class Agendamento {
 	@JoinColumn(name = "uuid_credenciado", referencedColumnName = "uuid")
 	private Credenciado medico;
 
+	@Valid
 	@Setter
 	@ManyToOne()
 	@NotNull(message = pacienteObrigatorio)
@@ -79,7 +76,7 @@ public class Agendamento {
 
 
 	public Agendamento dataHora(final Optional<String> dataHora) {
-		return this.dataHora(dataHora.map(formatadorData::parse).map(LocalDateTime::from).orElse(null));
+		return this.dataHora(dataHora.map(defaultDateAndTimeFormatter::parse).map(LocalDateTime::from).orElse(null));
 	}
 
 
